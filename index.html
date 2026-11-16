@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#28231f">
+  <meta name="description" content="Ugly Baker Bread Co customer, order and WhatsApp manager">
+  <title>Ugly Baker Bread Co</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo" src="ugly-baker-logo.png" alt="The Ugly Baker Bread Company logo">
+      <div><strong>UGLY BAKER</strong><span>BREAD CO · ORDER DESK</span></div>
+    </div>
+    <div class="top-actions">
+      <span id="storage-indicator" class="storage-indicator">● Stored on this device</span>
+      <button class="button button-quiet" id="backup-top">Backup</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">YOUR LITTLE BAKERY CONTROL CENTRE</p>
+        <h1>Good bread.<br><em>Well organised.</em></h1>
+        <p class="intro-copy">Manage customers, keep orders moving and send WhatsApp updates without a monthly platform fee.</p>
+      </div>
+      <div class="intro-stamp">SMALL BATCH<br><b>BIG FLAVOUR</b></div>
+    </section>
+
+    <nav class="tabs" aria-label="Main navigation">
+      <button class="tab active" data-view="dashboard">Overview</button>
+      <button class="tab" data-view="orders">Orders</button>
+      <button class="tab" data-view="customers">Customers</button>
+      <button class="tab" data-view="products">Products</button>
+      <button class="tab" data-view="costs">Ingredients & costs</button>
+      <button class="tab" data-view="messages">Messages</button>
+      <button class="tab" data-view="backup">Backup & data</button>
+    </nav>
+
+    <section id="view-dashboard" class="view active">
+      <div class="section-heading"><div><p class="eyebrow">AT A GLANCE</p><h2>Today's order desk</h2></div><button class="button button-primary" id="quick-add-order">＋ New order</button></div>
+      <div class="stats">
+        <article class="stat-card"><span>Open orders</span><strong id="stat-open">0</strong><small>Not yet completed</small></article>
+        <article class="stat-card"><span>Preparing</span><strong id="stat-preparing">0</strong><small>In the bakery</small></article>
+        <article class="stat-card"><span>Ready</span><strong id="stat-ready">0</strong><small>Awaiting collection</small></article>
+        <article class="stat-card"><span>Customers</span><strong id="stat-customers">0</strong><small>In your local list</small></article>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">LATEST ACTIVITY</p><h3>Recent orders</h3></div><button class="text-button" data-go="orders">All orders →</button></div>
+        <div id="recent-orders" class="empty-state">No orders yet. Add your first order to get started.</div>
+      </div>
+      <p class="notice"><strong>Local-first:</strong> Your data lives in this browser on this device. Export a backup regularly and keep a copy somewhere safe.</p>
+    </section>
+
+    <section id="view-orders" class="view">
+      <div class="section-heading"><div><p class="eyebrow">PRODUCTION & COLLECTION</p><h2>Orders</h2></div><button class="button button-primary" id="add-order">＋ New order</button></div>
+      <div class="toolbar"><input id="order-search" type="search" placeholder="Search order or customer…"><select id="order-filter"><option value="all">All statuses</option><option>Received</option><option>Preparing</option><option>Ready</option><option>Dispatched</option><option>Completed</option><option>Cancelled</option></select></div>
+      <div id="orders-list" class="record-list"></div>
+    </section>
+
+    <section id="view-customers" class="view">
+      <div class="section-heading"><div><p class="eyebrow">YOUR REGULARS</p><h2>Customers</h2></div><div class="button-row"><button class="button button-outline" id="import-contacts">Import phone contacts</button><button class="button button-primary" id="add-customer">＋ Add customer</button></div></div>
+      <div class="toolbar"><input id="customer-search" type="search" placeholder="Search name or number…"><button class="button button-outline" id="import-vcf">Import .vcf</button></div>
+      <div id="customers-list" class="record-list"></div>
+      <input id="vcf-file" type="file" accept=".vcf,text/vcard" hidden>
+    </section>
+
+
+    <section id="view-products" class="view">
+      <div class="section-heading"><div><p class="eyebrow">YOUR BAKERY RANGE</p><h2>Products</h2></div><button class="button button-primary" id="add-product">＋ Add product</button></div>
+      <div class="toolbar"><input id="product-search" type="search" placeholder="Search products…"><select id="product-filter"><option value="all">All products</option><option value="active">Active</option><option value="inactive">Discontinued</option></select></div>
+      <div id="products-list" class="record-list"></div>
+    </section>
+
+    <section id="view-costs" class="view">
+      <div class="section-heading"><div><p class="eyebrow">OPTIONAL COST CONTROL</p><h2>Ingredients & costs</h2></div><button class="button button-primary" id="add-ingredient">＋ Add ingredient</button></div>
+      <p class="muted">Costing is optional. Products and orders work normally without ingredient prices or recipes. Update an input cost here whenever a supplier price changes; current product cost estimates recalculate automatically.</p>
+      <div id="ingredients-list" class="record-list"></div>
+      <div class="panel safety-panel"><h3>How costing works</h3><ul><li>Set each ingredient's price and price unit, for example R16.78 per kg or R4.00 per each.</li><li>Recipe quantities must use the same unit as the ingredient price unit.</li><li>Packaging cost is optional and is added per product.</li><li>Changing an ingredient price updates current product estimates. Saved orders retain their recorded selling price and order details.</li></ul></div>
+    </section>
+
+    <section id="view-messages" class="view">
+      <div class="section-heading"><div><p class="eyebrow">PERSONAL, NOT SPAMMY</p><h2>WhatsApp messages</h2></div></div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>Send an update</h3>
+          <label>Customer<select id="message-customer"><option value="">Choose a customer…</option></select></label>
+          <label>Related order <select id="message-order"><option value="">No order selected</option></select></label>
+          <label>Message template<select id="message-template"></select></label>
+          <label>Your message<textarea id="message-body" rows="6" placeholder="Choose a customer and template, or write your own message…"></textarea></label>
+          <button class="button button-whatsapp" id="send-whatsapp">Open WhatsApp ↗</button>
+          <p class="helper">WhatsApp opens with the message filled in. You still review it and press Send inside WhatsApp.</p>
+        </div>
+        <div class="panel">
+          <h3>Message templates</h3>
+          <p class="muted">Edit the wording to sound like your bakery. Available placeholders: <code>{name}</code>, <code>{order}</code>, <code>{items}</code>, <code>{status}</code>, <code>{bakery}</code>.</p>
+          <div id="templates-list"></div>
+          <button class="button button-outline" id="add-template">＋ Add template</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-backup" class="view">
+      <div class="section-heading"><div><p class="eyebrow">YOUR DATA, YOURS TO KEEP</p><h2>Backup & data</h2></div></div>
+      <div class="backup-grid">
+        <article class="panel">
+          <div class="icon-disc">↓</div><h3>Export full backup</h3><p>Download customers, orders, message templates and settings as a dated JSON file.</p><button class="button button-primary" id="export-backup">Download backup</button>
+        </article>
+        <article class="panel">
+          <div class="icon-disc">↑</div><h3>Restore a backup</h3><p>Import a previous JSON backup. Choose whether to replace current data or merge records.</p><input id="backup-file" type="file" accept=".json,application/json" hidden><button class="button button-outline" id="choose-backup">Choose backup file</button>
+        </article>
+        <article class="panel">
+          <div class="icon-disc">▤</div><h3>Export customers</h3><p>Save your customer list as a CSV file that opens in Excel.</p><button class="button button-outline" id="export-customers">Export customer CSV</button>
+        </article>
+        <article class="panel">
+          <div class="icon-disc">▤</div><h3>Export orders</h3><p>Save your order list as a CSV file for your own records.</p><button class="button button-outline" id="export-orders">Export order CSV</button>
+        </article>
+      </div>
+      <div class="panel safety-panel"><h3>Important things to know</h3><ul><li>Data is stored in this browser on this device, not in your GitHub account.</li><li>Private/incognito browsing is not suitable for keeping your bakery records.</li><li>Browser storage can be cleared. Export backups regularly and store them outside this device.</li><li>Importing a backup on another device copies the data there; it does not create live synchronisation.</li><li>WhatsApp message sending requires an internet connection and your WhatsApp account.</li></ul></div>
+    </section>
+  </main>
+
+  <dialog id="customer-dialog" class="modal">
+    <form id="customer-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">CUSTOMER DETAILS</p><h2 id="customer-dialog-title">Add customer</h2></div><button type="button" class="close" data-close="customer-dialog">×</button></div>
+      <input type="hidden" id="customer-id">
+      <label>Customer name<input id="customer-name" required maxlength="100" placeholder="e.g. Jane Smith"></label>
+      <label>WhatsApp / mobile number<input id="customer-phone" required type="tel" placeholder="+27 82 123 4567"></label>
+      <label>Email (optional)<input id="customer-email" type="email" placeholder="jane@example.com"></label>
+      <label>Notes (optional)<textarea id="customer-notes" rows="3" placeholder="Preferences, collection notes…"></textarea></label>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="customer-dialog">Cancel</button><button class="button button-primary" type="submit">Save customer</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="order-dialog" class="modal">
+    <form id="order-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">BAKERY ORDER</p><h2 id="order-dialog-title">New order</h2></div><button type="button" class="close" data-close="order-dialog">×</button></div>
+      <input type="hidden" id="order-id">
+      <label>Customer<select id="order-customer" required><option value="">Choose customer…</option></select></label>
+      <label>Add catalogue product<select id="order-product-select"><option value="">Choose product…</option></select></label><div class="form-row"><label>Quantity<input id="order-product-qty" type="number" min="1" step="1" value="1"></label><label>&nbsp;<button type="button" class="button button-outline" id="add-product-to-order">Add product to order</button></label></div><label>Order items<textarea id="order-items" required rows="3" placeholder="Select products above or enter a custom order…"></textarea></label>
+      <div class="form-row"><label>Collection / dispatch date<input id="order-date" type="date"></label><label>Total (R)<input id="order-total" type="number" min="0" step="0.01" placeholder="0.00"></label></div>
+      <label>Status<select id="order-status"><option>Received</option><option>Preparing</option><option>Ready</option><option>Dispatched</option><option>Completed</option><option>Cancelled</option></select></label>
+      <label>Order notes (optional)<textarea id="order-notes" rows="2"></textarea></label>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="order-dialog">Cancel</button><button class="button button-primary" type="submit">Save order</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="template-dialog" class="modal">
+    <form id="template-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">MESSAGE LIBRARY</p><h2 id="template-dialog-title">Edit template</h2></div><button type="button" class="close" data-close="template-dialog">×</button></div>
+      <input type="hidden" id="template-id">
+      <label>Template name<input id="template-name" required></label>
+      <label>Message<textarea id="template-text" rows="6" required></textarea></label>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="template-dialog">Cancel</button><button class="button button-primary" type="submit">Save template</button></div>
+    </form>
+  </dialog>
+
+
+  <dialog id="product-dialog" class="modal">
+    <form id="product-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">BAKERY CATALOGUE</p><h2 id="product-dialog-title">Add product</h2></div><button type="button" class="close" data-close="product-dialog">×</button></div>
+      <input type="hidden" id="product-id">
+      <label>Product name<input id="product-name" required maxlength="120" placeholder="e.g. Traditional Sourdough Batard"></label>
+      <div class="form-row"><label>Selling price (R)<input id="product-price" type="number" min="0" step="0.01" placeholder="70.00"></label><label>Packaging cost per loaf (R)<input id="product-packaging" type="number" min="0" step="0.01" placeholder="Optional"></label></div>
+      <label>Description (optional)<textarea id="product-description" rows="2" placeholder="Product details, ingredients or customer-facing description…"></textarea></label>
+      <label>Availability<select id="product-active"><option value="true">Active</option><option value="false">Discontinued</option></select></label>
+      <p class="helper">You can save a product without entering any costs or recipe information.</p>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="product-dialog">Cancel</button><button class="button button-primary" type="submit">Save product</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="ingredient-dialog" class="modal">
+    <form id="ingredient-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">INPUT PRICE LIST</p><h2 id="ingredient-dialog-title">Add ingredient</h2></div><button type="button" class="close" data-close="ingredient-dialog">×</button></div>
+      <input type="hidden" id="ingredient-id">
+      <label>Ingredient / input name<input id="ingredient-name" required placeholder="e.g. High protein bread flour"></label>
+      <div class="form-row"><label>Cost (R)<input id="ingredient-cost" type="number" min="0" step="0.0001" required placeholder="16.78"></label><label>Price unit<input id="ingredient-unit" required placeholder="kg, g, each, L…"></label></div>
+      <label>Supplier / notes (optional)<input id="ingredient-notes" placeholder="Supplier, pack size or price date"></label>
+      <p class="helper">Example: enter 16.78 and kg for R16.78 per kilogram. Recipe quantities for this input must then be entered in kg.</p>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="ingredient-dialog">Cancel</button><button class="button button-primary" type="submit">Save input cost</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="recipe-dialog" class="modal">
+    <form id="recipe-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">OPTIONAL PRODUCT COSTING</p><h2 id="recipe-dialog-title">Recipe costing</h2></div><button type="button" class="close" data-close="recipe-dialog">×</button></div>
+      <input type="hidden" id="recipe-product-id">
+      <p id="recipe-product-label" class="muted"></p>
+      <div id="recipe-lines"></div>
+      <button type="button" class="button button-outline" id="add-recipe-line">＋ Add ingredient</button>
+      <div id="recipe-cost-preview" class="cost-preview"></div>
+      <p class="helper">Use the same unit configured for each ingredient price. For example, if flour is priced per kg, enter recipe flour quantities in kg (0.912 kg, not 912 g).</p>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="recipe-dialog">Cancel</button><button class="button button-primary" type="submit">Save recipe</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="restore-dialog" class="modal">
+    <form id="restore-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">RESTORE DATA</p><h2>Import backup</h2></div><button type="button" class="close" data-close="restore-dialog">×</button></div>
+      <p id="restore-summary" class="muted"></p>
+      <label class="radio-line"><input type="radio" name="restore-mode" value="merge" checked> Merge with existing data (matching IDs are updated)</label>
+      <label class="radio-line"><input type="radio" name="restore-mode" value="replace"> Replace all current data with this backup</label>
+      <p class="helper warning-text">Replacing cannot be undone. Export a backup of your current data first.</p>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="restore-dialog">Cancel</button><button class="button button-primary" type="submit">Import backup</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <footer><span>UGLY BAKER BREAD CO</span><span>LOCAL-FIRST · NO SUBSCRIPTION</span></footer>
+  <script src="app.js"></script>
+</body>
+</html>

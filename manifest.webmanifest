@@ -1,0 +1,24 @@
+{
+  "name": "Ugly Baker Bread Co Order Desk",
+  "short_name": "Ugly Baker",
+  "description": "Local customer, order and WhatsApp manager",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f2eb",
+  "theme_color": "#28231f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "ugly-baker-logo.png",
+      "sizes": "626x626",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
